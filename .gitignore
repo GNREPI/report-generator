@@ -1,0 +1,33 @@
+# R / RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user
+
+# renv: keep activate.R, settings.json, .gitignore; ignore the local library
+renv/library/
+renv/staging/
+renv/local/
+renv/lock-old/
+renv/python/
+renv/cellar/
+
+# IDE
+.idea/
+.vscode/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+~$*
+~WRL*.tmp
+*.tmp
+*.swp
+
+# Build outputs (CI regenerates these)
+final_dashboard.html
+output/*.rds
+reports/*.html
+*_files/
+*_cache/

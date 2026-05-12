@@ -1,0 +1,15 @@
+---
+title: "Narratives"
+author: "Allene"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# *Hepatitis*
+
+Hepatitis is an inflammation of the liver and also refers to a group of viral infections that affect the liver. The  most common types are Hepatitis A, Hepatitis B, and Hepatitis C. Hepatitis A is spread fecal-oral through contaminated food, water, surfaces, or person to person. Hepatitis B and C are spread through blood and bodily  fluids. Hepatitis may occur with limited or no symptoms, but often leads to jaundice, anorexia, and malaise. An  investigation of all Hepatitis A cases is required to determine if reported cases are new infections. Investigations of all Hepatitis B and C cases are prioritized based on the patient’s age and the source of the report to identify acute infections and recommended prophylaxis as appropriate.
+

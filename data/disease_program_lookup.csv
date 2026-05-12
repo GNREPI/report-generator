@@ -1,0 +1,43 @@
+disease,disease_program
+CAMPYLOBACTERIOSIS,Enteric
+CRYPTOSPORIDIOSIS,Enteric
+CYCLOSPORIASIS,Enteric
+GIARDIASIS,Enteric
+LEGIONELLOSIS,Enteric
+LISTERIOSIS,Enteric
+SALMONELLOSIS,Enteric
+SHIGA TOXIN PRODUCING E.COLI (STEC),Enteric
+SHIGELLOSIS,Enteric
+TOXOPLASMOSIS,Enteric
+TYPHOID,Enteric
+VIBRIOS-OTHER,Enteric
+YERSINIA,Enteric
+DENGUE,Vectorborne
+DENGUE HEM. FEVER,Vectorborne
+EHRLICHIA CHAFFEENSIS,Vectorborne
+LYME DISEASE,Vectorborne
+MALARIA,Vectorborne
+"Q FEVER, CHRONIC",Vectorborne
+Q FEVER,Vectorborne
+ROCKY MOUNTAIN SPOTTED FEVER,Vectorborne
+WEST NILE (WNV) INFECTION,Vectorborne
+HAEMOPHILUS INFLUENZAE (INVASIVE),Vaccine Preventable
+HEPATITIS A (ACUTE),Vaccine Preventable
+HEPATITIS B,Vaccine Preventable
+HEPATITIS B (ACUTE),Vaccine Preventable
+HEPATITIS B (CHRONIC),Vaccine Preventable
+HEPATITIS B (PROBABLE CHRONIC),Vaccine Preventable
+HEPATITIS C,Vaccine Preventable
+HEPATITIS C (ACUTE),Vaccine Preventable
+HEPATITIS C (CHRONIC),Vaccine Preventable
+HEPATITIS C (PROBABLE ACUTE),Vaccine Preventable
+HEPATITIS C (PROBABLE CHRONIC),Vaccine Preventable
+HEPATITIS E (ACUTE),Vaccine Preventable
+MEASLES (RUBEOLA),Vaccine Preventable
+MUMPS,Vaccine Preventable
+PERINATAL HEPATITIS B,Vaccine Preventable
+PERINATAL HEPATITIS C,Vaccine Preventable
+PERTUSSIS,Vaccine Preventable
+RSV - FATAL CASES,Vaccine Preventable
+RUBELLA (INCLUDING CONGENITAL),Vaccine Preventable
+VARICELLA (CHICKEN POX),Vaccine Preventable

@@ -1,0 +1,4 @@
+**About This Dashboard**
+
+<p>This dashboard is maintained by Gwinnett, Newton, & Rockdale County Health Departments (GNR) Epidemiology Team.
+It provides aggregated data on selected notifiable diseases reported across the district's three counties.</p>

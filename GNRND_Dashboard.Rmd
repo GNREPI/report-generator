@@ -1,0 +1,1450 @@
+---
+title: "GNR Public Health's <br>
+Notifiable Diseases Dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    theme:
+      version: 4 # Explicitly setting the version helps with bslib
+      bg: "#FFFFFF"
+      fg: "#13293d" 
+      primary: "#FAA81A"
+    includes:
+      in_header: OGheader.html
+---
+
+
+```{r setup, include=FALSE, echo=FALSE, warning =FALSE}
+
+knitr::clean_cache(clean = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+# opts_chunk$set(comment="")
+# 1. Source your theme and your functions (make sure load_plot_object is in here)
+source(here("R","brand_theme.R"))
+source(here::here("R", "functions.R"))
+source(here("R", "plot_accessibility.R"))
+
+
+
+
+## DISTRICT PLOTS
+# pre-generated District plots by program
+vpds_district_plot <- readRDS(here::here("output", "vpds_district_plot.rds"))
+vbds_district_plot <- readRDS(here::here("output", "vbds_district_plot.rds"))
+enteric_district_plot <- readRDS(here::here("output", "enterics_district_plot.rds"))
+
+
+# pre-generated District pies by demographic
+vpds_dis_gen_pie <- readRDS(here("output", "vpd_district_gender_pie.rds"))
+vpds_dis_rac_pie <- readRDS(here("output", "vpd_district_race_pie.rds"))
+vpds_dis_eth_pie <- readRDS(here("output", "vpd_district_ethnicity_pie.rds"))
+
+enterics_dis_gen_pie <- readRDS(here("output", "ent_district_gender_pie.rds"))
+enterics_dis_rac_pie <- readRDS(here("output", "ent_district_race_pie.rds"))
+enterics_dis_eth_pie <- readRDS(here("output", "ent_district_ethnicity_pie.rds"))
+
+vbds_dis_gen_pie <- readRDS(here("output", "vbd_district_gender_pie.rds"))
+vbds_dis_rac_pie <- readRDS(here("output", "vbd_district_race_pie.rds"))
+vbds_dis_eth_pie <- readRDS(here("output", "vbd_district_ethnicity_pie.rds"))
+
+
+## COUNTY PLOTS
+# These files will be loaded by the R Markdown dashboard later.
+Gvbd_gender <- readRDS(here("output", "Gvbd_gen_pie.rds"))
+Gvbd_race <- readRDS(here("output", "Gvbd_rac_pie.rds"))
+Gvbd_ethnicity <- readRDS(here("output", "Gvbd_eth_pie.rds"))
+
+Gvpd_gender <- readRDS(here("output", "Gvpd_gen_pie.rds"))
+Gvpd_race <- readRDS(here("output", "Gvpd_rac_pie.rds"))
+Gvpd_ethnicity <- readRDS(here("output", "Gvpd_eth_pie.rds"))
+
+Gent_gender <- readRDS(here("output", "Gent_gen_pie.rds"))
+Gent_race <- readRDS(here("output", "Gent_rac_pie.rds"))
+Gent_ethnicity <- readRDS(here("output", "Gent_eth_pie.rds"))
+
+Nvbd_gender <- readRDS(here("output", "Nvbd_gen_pie.rds"))
+Nvbd_race <- readRDS(here("output", "Nvbd_rac_pie.rds"))
+Nvbd_ethnicity <- readRDS(here("output", "Nvbd_eth_pie.rds"))
+
+Nvpd_gender <- readRDS(here("output", "Nvpd_gen_pie.rds"))
+Nvpd_race <- readRDS(here("output", "Nvpd_rac_pie.rds"))
+Nvpd_ethnicity <- readRDS(here("output", "Nvpd_eth_pie.rds"))
+
+Nent_gender <- readRDS(here("output", "Nent_gen_pie.rds"))
+Nent_race <- readRDS(here("output", "Nent_rac_pie.rds"))
+Nent_ethnicity <- readRDS(here("output", "Nent_eth_pie.rds"))
+
+
+Rvbd_gender <- readRDS(here("output", "Rvbd_gen_pie.rds"))
+Rvbd_race <- readRDS(here("output", "Rvbd_rac_pie.rds"))
+Rvbd_ethnicity <- readRDS(here("output", "Rvbd_eth_pie.rds"))
+
+Rvpd_gender <- readRDS(here("output", "Rvpd_gen_pie.rds"))
+Rvpd_race <- readRDS(here("output", "Rvpd_rac_pie.rds"))
+Rvpd_ethnicity <- readRDS(here("output", "Rvpd_eth_pie.rds"))
+
+Rent_gender <- readRDS(here("output", "Rent_gen_pie.rds"))
+Rent_race <- readRDS(here("output", "Rent_rac_pie.rds"))
+Rent_ethnicity <- readRDS(here("output", "Rent_eth_pie.rds"))
+
+
+# Hepatitis Data
+# district_hep_object <- readRDS(here("output", "district_hep_time.rds"))
+# Gwinnett_hep_object <- readRDS(here("output", "Gwinnett_hep_time.rds"))
+# Newton_hep_object <- readRDS(here("output", "Newton_hep_time.rds"))
+# Rockdale_hep_object <- readRDS(here("output", "Rockdale_hep_time.rds"))
+
+
+# --- Define counties and programs ---
+county_name <- c("Gwinnett", "Newton", "Rockdale")
+program_name <- c("Vaccine Preventable", "Vectorborne", "Enteric")
+
+# VPD_program_name <- program_name[1] # "Vaccine Preventable"
+# VBD_program_name <- program_name[2] # "Vectorborne"
+# ENTERIC_program_name <- program_name[3] # "Enteric"
+
+
+
+# 2. Keep only the "Global" objects you need for things like narratives
+# Narrative file mapping
+narrative_files <- list(
+  "Vaccine Preventable" = "VPDs.Rmd",
+  "Vectorborne" = "VBDs.Rmd",
+  "Enteric" = "Enterics.Rmd",
+  "Hep_C" = "Hepatitis_C.rmd",
+  "about_lines" = "about_dashboard.rmd")
+
+
+# Load all plots
+all_plots <- readRDS(here::here("output", "plots", "all_dashboard_plots.rds"))
+# all_hep_plots <- readRDS(here::here("output", "plots", "all_hep_plots.rds"))
+Gplot_list <- readRDS(here("output", "plots", "gwinnett_linebar_plots.rds"))
+
+# 3. Define shorthand tags
+tags <- htmltools::tags
+div <- htmltools::div
+```
+
+<!-- # For skip link #main ID -->
+<div id="main" tabindex="-1" style="outline: none;"></div>
+
+# **Notifiable Diseases Dashboard Overview** {.sidebar data-width=150}
+
+##### Accessibility Settings 
+
+<div class="accessibility-controls">
+  <button id="contrast-toggle" class="btn-accessibility">
+    <i class="fa fa-adjust"></i> HIGH CONTRAST MODE
+  </button>
+</div>
+
+
+#### 
+
+```{r About_summary, warning=FALSE, results='asis'}
+
+# Read the pre-generated text summary
+about_lines <- readLines(here("narratives","about_dashboard.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator, cat() is used because it prints text directly, honoring the Markdown formatting.
+ cat(about_lines, sep = "\n")
+ cat(" ")
+
+```
+
+
+
+```{r logo, results='asis'}
+
+htmltools::includeHTML("header.html")
+
+
+# This reads the content of header.html and injects it directly into the RMD document
+cat(readLines("OGheader.html"), sep = "\n")
+
+logo <- here("GNR_logo.png")
+tags$img(
+  src = logo,
+  alt="GNR Public Health Department Logo", style="max-width: 100%; height: auto;")
+
+```
+
+<p><strong>Last Updated:</strong> <script>document.write(new Date().toLocaleDateString());</script></p>
+
+# **About Us**
+
+```{r}
+# Read the pre-generated text summary
+about_lines <- readLines(here("narratives","aboutus.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator, cat() is used because it prints text directly, honoring the Markdown formatting.
+ cat(about_lines, sep = "\n")
+ cat(" ")
+ 
+```
+
+
+
+
+# Vaccine-Preventable Illnesses {data-navmenu="District Overview"}
+
+```{r VPDs_summary, warning=FALSE, results='asis'}
+
+# Read the pre-generated text summary
+vpds_district_lines <- readLines(here("narratives","VPDs.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator, cat() is used because it prints text directly, honoring the Markdown formatting.
+ cat(vpds_district_lines, sep = "\n")
+ cat(" ")
+
+```
+
+
+
+```{r 04_VPDs_district_plot, results='asis'}
+
+div(
+  class = "dashboard-card", 
+ vpds_district_plot$plot,
+    tags$span(
+      class="sr-only", 
+      vpds_district_plot$sr_text)
+    )
+
+cat(" ")
+
+```
+
+```{r results='asis'}
+
+cat("<br>")
+
+```
+
+##  {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vaccine Preventable Illnesses</h3>
+
+## {.no-title .no-box}
+
+### {.no-title .no-box}
+
+```{r district_gender, results='asis'}
+
+ div(
+  class = "dashboard-card", 
+ vpds_dis_gen_pie$plot,
+    tags$span(
+      class="sr-only", 
+      vpds_dis_gen_pie$sr_text)
+    )
+ 
+```
+
+
+###
+
+```{r district_ethnicity, results='asis'}
+
+div(
+  class = "dashboard-card", 
+ vpds_dis_eth_pie$plot,
+    tags$span(
+      class="sr-only", 
+      vpds_dis_eth_pie$sr_text)
+    )
+ 
+```
+
+
+###
+
+```{r district_race, results='asis'}
+ 
+div(
+  class = "dashboard-card", 
+ vpds_dis_rac_pie$plot,
+    tags$span(
+      class="sr-only", 
+      vpds_dis_rac_pie$sr_text)
+    )
+
+
+```
+
+
+## 
+
+```{r, results='asis'}
+
+cat("<br>")
+
+```
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Hepatitis Illnesses across the District</h3>
+
+## {.no-title .no-box}
+
+### {.no-title .no-box}
+
+```{r Hepatitis_C, warning=FALSE, results='asis'}
+
+# Read the pre-generated  text summary
+hepc_district_lines <- readLines(here("narratives", "Hepatitis_C.rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(hepc_district_lines, sep = "\n")
+
+cat(" ")
+
+```
+
+
+
+<!-- ```{r hep_plot, results='asis'} -->
+
+
+<!-- div( -->
+<!--   class = "dashboard-card",  -->
+<!--  district_hep_object$plot, -->
+<!--     tags$span( -->
+<!--       class="sr-only",  -->
+<!--       district_hep_object$sr_text) -->
+<!--     ) -->
+
+<!-- cat("<br>") -->
+
+<!-- ``` -->
+
+
+
+
+
+# Enteric Illnesses {data-navmenu="District Overview"}
+
+```{r 04_Enterics_Summary, results='asis'}
+# Read the pre-generated accessible text summary
+enterics_district_lines <- readLines(here("narratives","Enterics.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(enterics_district_lines, sep = "\n")
+
+
+cat(" ")
+```
+
+
+
+```{r 04_Enterics_district_plot, warning=FALSE, results='asis'}
+
+div(
+  class = "dashboard-card",  # <- apply the global card style
+enteric_district_plot$plot,
+     tags$span(
+       class="sr-only", 
+       enteric_district_plot$sr_text)
+)
+cat("<br>")
+
+```
+
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Enteric Illnesses</h3>
+
+## {.no-title .no-box}
+
+### {.no-title .no-box}
+
+```{r ent_dis_gen, results='asis'}
+ 
+ 
+div(
+  class = "dashboard-card", 
+ enterics_dis_gen_pie$plot,
+    tags$span(
+      class="sr-only", 
+      enterics_dis_gen_pie$sr_text)
+    )
+
+```
+
+
+###
+
+```{r ent_dis_race, results='asis'}
+ 
+div(
+  class = "dashboard-card", 
+ enterics_dis_rac_pie$plot,
+    tags$span(
+      class="sr-only", 
+      enterics_dis_rac_pie$sr_text)
+    )
+
+```
+
+
+###
+
+```{r ent_dis_ethnicity, results='asis'}
+ 
+div(
+  class = "dashboard-card", 
+ enterics_dis_eth_pie$plot,
+    tags$span(
+      class="sr-only", 
+      enterics_dis_eth_pie$sr_text)
+    )
+
+```
+
+
+
+
+
+# Vectorborne Illnesses {data-navmenu="District Overview"}
+
+```{r 04_VBD_text, warning=FALSE, results='asis'}
+
+# Read the pre-generated accessible text summary
+vbds_district_lines <- readLines(here("narratives","VBDs.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(vbds_district_lines, sep = "\n")
+
+
+cat(" ")
+
+```
+
+
+```{r 04_VBDs_district_plot, warning=FALSE, results='asis'}
+
+div(
+  class = "dashboard-card",  # <- apply the global card style
+vbds_district_plot$plot,
+     tags$span(
+       class="sr-only", 
+       vbds_district_plot$sr_text)
+)
+cat(" ")
+
+```
+
+
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vectorborne Illnesses</h3>
+
+## {.no-title .no-box}
+
+### {.no-title .no-box}
+
+```{r vbd_dis_gen, results='asis'}
+
+ 
+div(
+  class = "dashboard-card", 
+ vbds_dis_gen_pie$plot,
+    tags$span(
+      class="sr-only", 
+      vbds_dis_gen_pie$sr_text)
+    )
+
+```
+
+
+
+### 
+
+```{r vbd_dis_race, results='asis'}
+
+ 
+div(
+  class = "dashboard-card", 
+ vbds_dis_rac_pie$plot,
+    tags$span(
+      class="sr-only", 
+      vbds_dis_rac_pie$sr_text)
+    )
+
+```
+
+
+
+### 
+
+```{r vbd_dis_ethnicity, results='asis'}
+
+ 
+div(
+  class = "dashboard-card", 
+ vbds_dis_eth_pie$plot,
+    tags$span(
+      class="sr-only", 
+      vbds_dis_eth_pie$sr_text)
+    )
+
+```
+
+
+
+
+
+# **Gwinnett County**
+
+
+## Population {.no-title .no-box}
+
+### 📈 Gwinnett Population: {.no-box data-width=150}
+
+```{r Gpop_callout, echo=FALSE}
+
+
+Gpop <- "1,003,869" # Example R calculation
+# The 'value' attribute automatically handles the large formatting.
+
+
+valueBox(
+  value = Gpop,
+  icon = "fa-pencil",
+  color = "primary"
+)
+cat(" ")
+
+
+```
+
+
+
+
+## 
+
+### 
+
+<h3 style="font-weight=bold; margin:0;">Vaccine Preventable Illnesses</h3>
+
+
+```{r 04_GVPDs_text, results='asis'}
+
+vpds_gwinnett_lines <- readLines(here("narratives","VPDs.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(vpds_gwinnett_lines, sep = "\n")
+
+cat(" ")
+
+cat("<br>")
+
+```
+
+
+##
+
+```{r GVPD_bar, results='asis'}
+
+vplot_obj <- Gplot_list$bar_chart$`Vaccine Preventable`$plot
+
+vplot_obj
+
+
+```
+
+###
+
+```{r GVPD_timeplot, results='asis'}
+
+
+Gvplot_list_obj <- Gplot_list$line_charts$`Vaccine Preventable`$plot
+
+Gvplot_list_obj
+
+
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vaccine Preventable Illnesses</h3>
+
+## {.no-title .no-box}
+
+### {.no-title .no-box}
+
+```{r Gvpd_gender, results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gvpd_gender$plot,
+    tags$span(
+      class="sr-only", 
+      Gvpd_gender$sr_text)
+    )
+
+```
+
+
+###
+
+```{r Gvpd_race, results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gvpd_race$plot,
+    tags$span(
+      class="sr-only", 
+      Gvpd_race$sr_text)
+    )
+
+```
+
+
+### 
+
+```{r Gvpd_eth, results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gvpd_ethnicity$plot,
+    tags$span(
+      class="sr-only", 
+      Gvpd_ethnicity$sr_text)
+    )
+
+```
+
+
+
+
+##
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Vectorborne Illnesses</h3>
+
+```{r 04_GVBDs_text, warning=FALSE, results='asis'}
+
+vbds_gwinnett_lines <- readLines(here("narratives","VBDs.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(vbds_gwinnett_lines, sep = "\n")
+
+cat(" ")
+
+cat("<br>")
+```
+
+
+## VBD Plot
+
+### {.no-title .no-box}
+
+```{r 04_Gwinnett_VBD_barplot, results='asis'}
+
+vbplot_obj <- Gplot_list$bar_chart$`Vectorborne`$plot
+
+vbplot_obj
+
+
+```
+
+
+###
+
+```{r Gwinnett_VBD_line, results='asis'}
+
+Gvbplot_list_obj <- Gplot_list$line_charts$`Vectorborne`$plot
+
+Gvbplot_list_obj
+
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vectorborne Illnesses</h3>
+
+## {.no-title .no-box}
+
+### {.no-title .no-box}
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gvbd_gender$plot,
+    tags$span(
+      class="sr-only", 
+      Gvbd_gender$sr_text)
+    )
+
+```
+
+
+### 
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gvbd_race$plot,
+    tags$span(
+      class="sr-only", 
+      Gvbd_race$sr_text)
+    )
+
+```
+
+
+### 
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gvbd_ethnicity$plot,
+    tags$span(
+      class="sr-only", 
+      Gvbd_ethnicity$sr_text)
+    )
+
+
+```
+
+
+
+
+## 
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Enteric Illnesses</h3>
+
+```{r 04_Genterics_text, warning=FALSE, results='asis'}
+enterics_gwinnett_lines <- readLines(here("narratives","Enterics.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(enterics_gwinnett_lines, sep = "\n")
+
+cat(" ")
+
+cat("<br>")
+
+```
+
+
+##
+
+```{r 04_Genterics_plot, warning=FALSE, echo=FALSE, results='asis'}
+
+
+Geplot_obj <- Gplot_list$bar_chart$`Enteric`$plot
+
+Geplot_obj
+
+
+
+```
+
+
+###
+
+```{r Genterics_time, warning=FALSE, echo=FALSE, results='asis'}
+
+Geplot_list_obj <- Gplot_list$line_charts$`Enteric`$plot
+
+Geplot_list_obj
+
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Enteric Illnesses</h3>
+
+## {.no-title}
+
+### {.no-title}
+
+```{r Gent_gender, results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gent_gender$plot,
+    tags$span(
+      class="sr-only", 
+      Gent_gender$sr_text)
+    )
+
+```
+
+
+### 
+
+```{r Gent_race, results='asis'}
+div(
+  class = "dashboard-card", 
+ Gent_race$plot,
+    tags$span(
+      class="sr-only", 
+      Gent_race$sr_text)
+    )
+```
+
+
+### 
+
+```{r Gent_ethresults='asis'}
+
+div(
+  class = "dashboard-card", 
+ Gent_ethnicity$plot,
+    tags$span(
+      class="sr-only", 
+      Gent_ethnicity$sr_text)
+    )
+```
+
+
+
+
+
+
+# **Newton County**
+
+## Population {.no-title .no-box}
+
+### 📈 Newton Population 
+
+```{r Npop_callout, echo=FALSE}
+Npop <- "124,010" # Example R calculation
+# The 'value' attribute automatically handles the large formatting.
+cat(Npop)
+
+valueBox(
+  value = Npop,
+  icon = "fa-pencil",
+  color = "primary"
+)
+cat(" ")
+```
+
+
+##
+
+### Vaccine Preventables
+
+<h3 style="font-weight=bold; margin:0;">Vaccine Preventable Illnesses in Newton County</h3>
+
+```{r 04_NVPDs_text, results='asis'}
+vpds_newton_lines <- readLines(here("narratives","VPDs.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(vpds_newton_lines, sep = "\n")
+
+cat(" ")
+
+```
+
+
+###
+
+```{r 04_Newton_VPD_plot, echo=FALSE, warning=FALSE}
+
+plot_obj <- all_plots$Newton$`Vaccine Preventable`$bar
+
+ggplotly(plot_obj$plot)
+
+
+```
+
+
+```{r results='asis'}
+
+cat("<br>")
+
+```
+
+
+
+<!-- ## {data-height=40} -->
+
+<!-- ### {.no-title .no-box} -->
+
+<!-- <h3 style="font-weight=bold; margin:0;">Hepatitis Illnesses in Newton County</h3> -->
+
+<!-- ## {.no-title .no-box} -->
+
+<!-- ### {.no-title .no-box} -->
+
+<!-- ```{r nheptime, results='asis'} -->
+
+<!-- # 1. Grab the object from the master list -->
+<!-- plot_obj <- all_hep_plots$Newton_Hep_time -->
+
+<!-- # 2. Wrap it in the dashboard-card div -->
+<!-- htmltools::tagList( -->
+<!--   htmltools::tags$div( -->
+<!--     class = "dashboard-card",  -->
+<!--     plot_obj$plot, -->
+<!--     htmltools::tags$span( -->
+<!--       class = "sr-only",  -->
+<!--       plot_obj$sr_text -->
+<!--     ) -->
+<!--   ) -->
+<!-- ) -->
+
+
+
+<!-- ``` -->
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vaccine Preventable Illnesses in Newton County</h3>
+  
+## {.no-title .no-box}
+  
+### {.no-title .no-box}
+
+```{r Ngender, results='asis'}
+
+
+div(
+  class = "dashboard-card", 
+ Nvpd_gender$plot,
+    tags$span(
+      class="sr-only", 
+      Nvpd_gender$sr_text)
+    )
+
+
+```
+
+
+###
+
+```{r Nrace, results='asis'}
+div(
+  class = "dashboard-card", 
+ Nvpd_race$plot,
+    tags$span(
+      class="sr-only", 
+      Nvpd_race$sr_text)
+    )
+```
+
+
+### 
+
+```{r Neth, results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Nvpd_ethnicity$plot,
+    tags$span(
+      class="sr-only", 
+      Nvpd_ethnicity$sr_text)
+    )
+```
+
+
+
+##
+
+### Vectorborne
+
+<h3 style="font-weight=bold; margin:0;">Vectorborne Illnesses in Newton County</h3>
+
+```{r 04_NVBDs_text, warning=FALSE, results='asis'}
+vbds_newton_lines <- readLines(here("narratives","VBDs.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(vbds_newton_lines, sep = "\n")
+cat(" ")
+
+cat("<br>")
+
+```
+
+
+
+## VBD Plot
+
+### {.no-title .no-box}
+
+```{r 04_Newton_VBD_plot, echo=FALSE, results='asis'}
+
+plot_obj <- all_plots$Newton$`Vectorborne`$bar
+
+plot_obj$plot
+
+
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vectorborne Illnesses in Newton County</h3>
+  
+## {.no-title .no-box}
+  
+### {.no-title .no-box}
+
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Nvbd_gender$plot,
+    tags$span(
+      class="sr-only", 
+      Nvbd_gender$sr_text)
+    )
+
+```
+
+
+###
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Nvbd_race$plot,
+    tags$span(
+      class="sr-only", 
+      Nvbd_race$sr_text)
+    )
+
+```
+
+
+###
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Nvbd_ethnicity$plot,
+    tags$span(
+      class="sr-only", 
+      Nvbd_ethnicity$sr_text)
+    )
+
+
+```
+
+
+
+
+## 
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Enteric Illnesses</h3>
+
+```{r 04_nenterics_text, warning=FALSE, results='asis'}
+enterics_newton_lines <- readLines(here("narratives","Enterics.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(enterics_newton_lines, sep = "\n")
+cat(" ")
+
+```
+
+
+### Enteric Plot
+
+```{r 04_Newton_enterics_plot, echo=FALSE, warning=FALSE}
+
+
+plot_obj <- all_plots$Newton$`Enteric`$bar
+
+ggplotly(plot_obj$plot)
+
+cat(" ")
+
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Enteric Illnesses in Newton County</h3>
+
+## {.no-title}
+
+### {.no-title}
+  
+```{r Ngend, results='asis'}  
+
+
+div(
+  class = "dashboard-card", 
+  Nent_gender$plot,
+  tags$span(
+    class="sr-only", 
+    Nent_gender$sr_text)
+)
+
+```
+
+
+### 
+
+```{r Nent_race, results='asis'}
+div(
+  class = "dashboard-card", 
+  Nent_race$plot,
+  tags$span(
+    class="sr-only", 
+    Nent_race$sr_text)
+)
+```
+
+
+### 
+
+```{r Nent_ethresults='asis'}
+
+div(
+  class = "dashboard-card", 
+  Nent_ethnicity$plot,
+  tags$span(
+    class="sr-only", 
+    Nent_ethnicity$sr_text)
+)
+```
+
+
+
+
+
+# **Rockdale County** {.tabset}
+
+### 📈 Rockdale Population: 97,610 {.no-title .no-box}
+
+```{r Rpop_callout, echo=FALSE}
+Rpop <- "97,610" # Example R calculation
+# The 'value' attribute automatically handles the large formatting.
+cat(Rpop)
+```
+
+
+##
+
+### 
+
+<h3 style="font-weight=bold; margin:0;">Vaccine Preventable Illnesses in Rockdale County</h3>
+
+```{r 04_RVPDs_text, warning=FALSE, results='asis'}
+
+vpds_rockdale_lines <- readLines(here("narratives","VPDs.Rmd"))
+
+
+cat(vpds_rockdale_lines, sep = "\n")
+cat(" ")
+
+
+
+cat("<br>")
+```
+
+
+```{r RVPD_bar, results='asis'}
+
+plot_obj <- all_plots$Rockdale$`Vaccine Preventable`$bar
+plot_obj$plot
+
+```
+
+
+```{r RVPD_timeplot, results='asis'}
+
+plot_obj <- all_plots$Rockdale$`Vaccine Preventable`$trend
+plot_obj$plot
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vaccine Preventable Illnesses in Rockdale County</h3>
+  
+## {.no-title .no-box}
+  
+### {.no-title .no-box}
+
+
+```{r Rvpd_gender, results='asis'}
+
+gender_plot <- all_plots$Rockdale$`Vaccine Preventable`$gender
+gender_plot$plot
+
+
+```
+
+
+### 
+
+```{r Rvpd_race, results='asis'}
+
+race_plot <- all_plots$Rockdale$`Vaccine Preventable`$race
+race_plot$plot
+
+```
+
+
+### 
+
+```{r Rvpd_ethnicity, results='asis'}
+
+ethnicity_plot <- all_plots$Rockdale$`Vaccine Preventable`$ethnicity
+ethnicity_plot$plot
+
+```
+
+
+
+
+##
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Vectorborne Illnesses in Rockdale County</h3>
+
+```{r 04_Rvbds_text, warning=FALSE, results='asis'}
+vbds_rockdale_lines <- readLines(here("narratives","VBDs.Rmd"))
+
+cat(vbds_rockdale_lines, sep = "\n")
+
+cat(" ")
+```
+
+
+## VBD Plot
+
+### {.no-title .no-box}
+
+```{r 04_RVBD_barplot, results='asis'}
+
+plot_obj <- all_plots$Rockdale$`Vectorborne`$bar
+plot_obj$plot
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vectorborne Illnesses in Rockdale County</h3>
+  
+## {.no-title .no-box}
+  
+### {.no-title .no-box}
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Rvbd_gender$plot,
+    tags$span(
+      class="sr-only", 
+      Rvbd_gender$sr_text)
+    )
+
+```
+
+
+### 
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Rvbd_race$plot,
+    tags$span(
+      class="sr-only", 
+      Rvbd_race$sr_text)
+    )
+
+```
+
+
+### 
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Rvbd_ethnicity$plot,
+    tags$span(
+      class="sr-only", 
+      Rvbd_ethnicity$sr_text)
+    )
+
+
+```
+
+
+
+
+## 
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Enteric Illnesses</h3>
+
+```{r 04_renterics_text, warning=FALSE, results='asis'}
+enterics_rockdale_lines <- readLines(here("narratives","Enterics.Rmd"))
+
+cat(enterics_rockdale_lines, sep = "\n")
+
+cat(" ")
+
+```
+
+
+##
+
+```{r 04_Renterics_plot, results='asis'}
+
+
+# Replot_obj <- Rplot_list$bar_chart$`Enteric`$plot
+# 
+# Replot_obj
+
+
+
+```
+
+
+###
+
+```{r renterics_time, results='asis'}
+
+# Replot_list_obj <- Rplot_list$line_charts$`Enteric`$plot
+# 
+# Replot_list_obj
+
+```
+
+
+
+## {data-height=40}
+
+### {.no-title .no-box}
+
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Enteric Illnesses in Rockdale County</h3>
+
+## {.no-title}
+
+### {.no-title}
+
+
+```{r results='asis'}
+
+
+div(
+  class = "dashboard-card", 
+ Rent_gender$plot,
+    tags$span(
+      lass="sr-only", 
+      Rent_gender$sr_text)
+    )
+
+```
+
+
+### 
+
+```{r results='asis'}
+div(
+  class = "dashboard-card", 
+ Rent_race$plot,
+    tags$span(
+      class="sr-only", 
+      Rent_race$sr_text)
+    )
+```
+
+
+### 
+
+```{r results='asis'}
+
+div(
+  class = "dashboard-card", 
+ Rent_ethnicity$plot,
+    tags$span(
+      class="sr-only", 
+      Rent_ethnicity$sr_text)
+    )
+```
+
+
+
+
+
+# **Data Dictionary**
+
+```{r}
+# # Read the pre-generated text summary
+# ddictionary <- readLines(here("narratives","ddictionary.Rmd"))
+# 
+# # 2. Print the lines using cat() with a newline separator, cat() is used because it prints text directly, honoring the Markdown formatting.
+#  cat(ddictionary, sep = "\n")
+#  cat(" ")
+```
+
+
+

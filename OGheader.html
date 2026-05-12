@@ -1,0 +1,374 @@
+
+<!-- Link to font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+
+
+<style type="text/css">
+/* Adds padding to the main dashboard container */
+.container-fluid.main-container {
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
+
+/* Adds space at the top/bottom of the dashboard */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+</style>
+
+
+
+<style>
+
+/* The Loading Overlay Background */
+#loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff; /* Matches dashboard background */
+  z-index: 9999; /* Sits on top of everything */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* The Spinner Animation */
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #1a2a3a; /* Your District Navy */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-text {
+  margin-top: 15px;
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  color: #1a2a3a;
+  font-weight: 600;
+}
+
+<!-- Accessibility Enhancements -->
+
+/* Screen-reader-only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip Link visibility and focus behavior */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+  border-radius: 5px;
+}
+
+
+/* High-contrast focus ring for ADA compliance */
+:focus {
+  outline: 3px solid #FFB900;
+  outline-offset: 2px;
+}
+
+/* --- Typography --- */
+/* Note: Using tags instead of classes to target headers globally */
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+    font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+}
+
+h1, .h1 {
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+h2, .h2 {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+body, .body, p, span {
+  font-family: 'Roboto', Arial, Sans-Serif;
+  background-color: #f4f7f6;
+  letter-spacing: 0.2px;
+}
+
+/* --- Navigation Bar (Header)
+This targets the very top bar of your dashboard where your title lives. --- */
+
+
+/* --- This targets the text (the brand/title) inside that bar.--- */
+.navbar-inverse .navbar-brand {
+  white-space: normal !important;  /* Allows text to wrap */
+  line-height: 1.1 !important;    /* Keeps lines close together */
+  height: auto !important;        /* Let the container grow vertically */
+  display: flex !important;       /* Helps with alignment */
+  align-items: center;            /* Centers text vertically */
+  max-width: 250px;               /* Limits width to force the break */
+  background-color: #FAA81A; /* Your District Orange/Yellow from YAML */
+  color: #1a2a3a !important; /* Dark text for contrast on yellow */
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .75px;
+}
+
+/* Ensure the whole navbar expands to fit the new 2-line title */
+.navbar {
+  height: auto !important;
+  min-height: 50px;
+}
+
+/* The Sidebar Background & Text */
+.section.sidebar {
+  background-color: #f8f9fa !important; /* Light grey or your choice */
+  border-right: 1px solid #e1e8ed;
+}
+
+/* Sidebar Headings in Brandon Grotesque Black */
+.section.sidebar h2, .section.sidebar h3, .section.sidebar .control-label {
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  color: #1a2a3a;
+}
+
+/* 1. Style the main Menu Title in the Navbar */
+.navbar-inverse .navbar-nav > li > a {
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 2. Style the Dropdown Menu Box */
+.navbar-inverse .navbar-nav .dropdown-menu {
+  background-color: #ffffff; /* Your District Navy */
+  border: 1px solid #FAA81A; /* District Orange border */
+  border-top: 3px solid #FAA81A; /* Keeps the District Orange as a top accent line */
+  border-radius: 4px;
+}
+
+/* 3. Style the individual items inside the Dropdown */
+.navbar-inverse .navbar-nav .dropdown-menu > li > a {
+  color: #1a2a3a !important;
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  padding: 10px 20px;
+}
+
+/* 4. Style the Hover state for menu items */
+.navbar-inverse .navbar-nav .dropdown-menu > li > a:hover {
+  background-color: #FAA81A !important; /* District Orange on hover */
+  color: #1a2a3a !important; /* Dark text on orange hover */
+}
+
+.navbar-inverse .navbar-nav > .dropdown > a .caret {
+  border-top-color: #ffffff; /* Makes arrow white */
+  border-bottom-color: #ffffff;
+}
+
+/* mobile responsiveness */
+@media (max-width: 768px) {
+  .navbar-inverse .navbar-nav .dropdown-menu {
+    background-color: #f8f9fa; /* Lighter background for mobile readability */
+  }
+  .navbar-inverse .navbar-nav .dropdown-menu > li > a {
+    color: #1a2a3a !important; /* Dark text for mobile */
+    border-bottom: 1px solid #e1e8ed;
+  }
+}
+
+
+/* --- High Contrast Mode Styles --- */
+body.high-contrast {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Force all charts and cards to high-contrast colors */
+body.high-contrast .chart-wrapper,
+body.high-contrast .dashboard-card {
+  background-color: #000000 !important;
+  border: 2px solid #ffff00 !important; /* Bright Yellow border */
+  color: #ffffff !important;
+}
+
+body.high-contrast .chart-title,
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3 {
+  color: #ffff00 !important; /* High-viz Yellow for Brandon font */
+}
+
+/* Ensure navbar is high-contrast */
+body.high-contrast .navbar-inverse {
+  background-color: #000000 !important;
+  border-bottom: 2px solid #ffff00 !important;
+}
+
+/* The Toggle Button itself */
+.btn-accessibility {
+  background-color: #1a2a3a;
+  color: white;
+  border: 1px solid #ffffff;
+  padding: 8px 12px;
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  font-size: 11px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+
+/* --- Chart/Box Styling This targets the individual "tiles" or "cards"
+that hold your maps and graphs. --- */
+/* The actual "box" around your plots. */
+.chart-wrapper {
+  border-radius: 8px; /* Rounded corners for a modern look */
+  border: 1px solid #e1e8ed;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+  background-color: #ffffff;
+}
+
+/* The text at the top of each box. */
+.chart-title {
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  border-bottom: 1px solid #f0f0f0; /* Adds a faint line under the title to separate it from the graph. */
+  color: #2c3e50;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+/* --- Value Box Customization These are the large summary boxes--- */
+.value-box {
+  border-radius: 10px;
+  transition: transform 0.2s; /* Subtle hover effect */
+}
+
+/* This is a "Pseudo-class." It only activates when a user's mouse is over the box.*/
+.value-box:hover {
+  transform: translateY(-3px); /* This "lifts" the box up by 3 pixels.*/
+}
+
+/* --- PRINT RULES --- */
+@media print {
+  .section.sidebar, .navbar, #loader-wrapper, .skip-link {
+    display: none !important;
+  }
+  .chart-wrapper {
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+}
+
+/* --- Custom Dashboard Cards (Used in R Chunks) --- */
+.dashboard-card {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px; /* Matches your chart-wrapper for consistency */
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.dashboard-card h3 {
+  margin-top: 0;
+  color: #333333;
+  font-family: 'Brandon Grotesque Black', Arial, Sans-Serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  width: 100%; /* Allows responsiveness */
+  max-width: 1200px; /* Limits max size on huge monitors */
+  margin: 0 auto;
+  }
+</style>
+
+<!-- Skip Link -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const skipLink = document.querySelector(".skip-link");
+  skipLink.addEventListener("click", function(e){
+    const target = document.querySelector(this.getAttribute("href"));
+    if (target) {
+      e.preventDefault();
+      target.setAttribute("tabindex", "-1");
+      target.focus();
+      window.scrollTo({
+        top: target.offsetTop,
+        behavior: "smooth"
+      });
+    }
+  });
+});
+
+window.addEventListener("load", function() {
+  const loader = document.getElementById("loader-wrapper");
+  // Fade out the loader once everything is ready
+  loader.style.transition = "opacity 0.5s ease";
+  loader.style.opacity = "0";
+  setTimeout(() => {
+    loader.style.display = "none";
+  }, 500);
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const toggleBtn = document.getElementById("contrast-toggle");
+  const body = document.body;
+
+  // Check if the user previously turned on high contrast
+  if (localStorage.getItem("high-contrast") === "enabled") {
+    body.classList.add("high-contrast");
+  }
+
+  toggleBtn.addEventListener("click", function() {
+    body.classList.toggle("high-contrast");
+
+    // Save the preference
+    if (body.classList.contains("high-contrast")) {
+      localStorage.setItem("high-contrast", "enabled");
+    } else {
+      localStorage.setItem("high-contrast", "disabled");
+    }
+  });
+});
+</script>
