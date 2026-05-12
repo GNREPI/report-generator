@@ -7,9 +7,9 @@
 # Date: 09/29/2025
 #----
 library(here)
-install.packages("renv")
-renv::init()
-renv::snapshot()
+
+# Ensure output directory exists (gitignored in CI; absent on fresh checkouts)
+dir.create(here("output"), showWarnings = FALSE, recursive = TRUE)
 
 # 1. Setup and Environment ----
 # Loads required packages and custom functions.

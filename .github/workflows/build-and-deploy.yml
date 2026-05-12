@@ -1,0 +1,81 @@
+name: Build and deploy dashboard
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libfontconfig1-dev \
+            libfreetype6-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libproj-dev \
+            libudunits2-dev \
+            libsqlite3-dev \
+            libcairo2-dev \
+            libxt-dev
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'renv-lockfile'
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-renv@v2
+
+      - name: Build dashboard
+        run: Rscript "R/00_Report Generation Pipeline.R"
+
+      - name: Verify build output
+        run: |
+          test -f final_dashboard.html || { echo "ERROR: final_dashboard.html was not produced"; exit 1; }
+          echo "Built $(du -h final_dashboard.html | cut -f1) dashboard"
+
+      - name: Stage Pages artifact
+        run: |
+          mkdir -p _site
+          cp final_dashboard.html _site/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
