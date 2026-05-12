@@ -112,8 +112,8 @@ narrative_files <- list(
   "Vaccine Preventable" = "VPDs.Rmd",
   "Vectorborne" = "VBDs.Rmd",
   "Enteric" = "Enterics.Rmd",
-  "Hep_C" = "Hepatitis_C.rmd",
-  "about_lines" = "about_dashboard.rmd")
+  "Hep_C" = "Hepatitis_C.Rmd",
+  "about_lines" = "about_dashboard.Rmd")
 
 
 # Load all plots
@@ -298,7 +298,7 @@ cat("<br>")
 ```{r Hepatitis_C, warning=FALSE, results='asis'}
 
 # Read the pre-generated  text summary
-hepc_district_lines <- readLines(here("narratives", "Hepatitis_C.rmd"))
+hepc_district_lines <- readLines(here("narratives", "Hepatitis_C.Rmd"))
 
 # 2. Print the lines using cat() with a newline separator
 #    cat() is used because it prints text directly, honoring the Markdown formatting.
