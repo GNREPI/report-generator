@@ -11,6 +11,16 @@ library(here)
 # Ensure output directory exists (gitignored in CI; absent on fresh checkouts)
 dir.create(here("output"), showWarnings = FALSE, recursive = TRUE)
 
+# Stage canonical input data into output/ — the plot scripts read
+# combo_deidentified_clean.{qs,csv} from output/, which is where Allene's
+# (commented-out) cleaning step would have written them. The canonical source
+# of truth lives in data/clean/; this copy keeps her individual scripts
+# unmodified so future updates from her merge cleanly.
+clean_files <- list.files(here("data", "clean"), full.names = TRUE)
+if (length(clean_files) > 0) {
+  file.copy(clean_files, here("output"), overwrite = TRUE)
+}
+
 # 1. Setup and Environment ----
 # Loads required packages and custom functions.
 # The 'packages.R' script should contain all library calls.
