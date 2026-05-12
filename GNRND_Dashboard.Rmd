@@ -174,14 +174,14 @@ tags$img(
 
 # **About Us**
 
-```{r}
+```{r aboutus_text, warning=FALSE, results='asis'}
 # Read the pre-generated text summary
 about_lines <- readLines(here("narratives","aboutus.Rmd"))
 
 # 2. Print the lines using cat() with a newline separator, cat() is used because it prints text directly, honoring the Markdown formatting.
  cat(about_lines, sep = "\n")
  cat(" ")
- 
+
 ```
 
 
@@ -1226,29 +1226,43 @@ plot_obj$plot
 
 ```{r Rvpd_gender, results='asis'}
 
-gender_plot <- all_plots$Rockdale$`Vaccine Preventable`$gender
-gender_plot$plot
-
+div(
+  class = "dashboard-card",
+ Rvpd_gender$plot,
+    tags$span(
+      class="sr-only",
+      Rvpd_gender$sr_text)
+    )
 
 ```
 
 
-### 
+###
 
 ```{r Rvpd_race, results='asis'}
 
-race_plot <- all_plots$Rockdale$`Vaccine Preventable`$race
-race_plot$plot
+div(
+  class = "dashboard-card",
+ Rvpd_race$plot,
+    tags$span(
+      class="sr-only",
+      Rvpd_race$sr_text)
+    )
 
 ```
 
 
-### 
+###
 
-```{r Rvpd_ethnicity, results='asis'}
+```{r Rvpd_eth, results='asis'}
 
-ethnicity_plot <- all_plots$Rockdale$`Vaccine Preventable`$ethnicity
-ethnicity_plot$plot
+div(
+  class = "dashboard-card",
+ Rvpd_ethnicity$plot,
+    tags$span(
+      class="sr-only",
+      Rvpd_ethnicity$sr_text)
+    )
 
 ```
 
