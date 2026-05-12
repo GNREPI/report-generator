@@ -828,7 +828,7 @@ div(
 
 ### 
 
-```{r Gent_ethresults='asis'}
+```{r Gent_eth, results='asis'}
 
 div(
   class = "dashboard-card", 
@@ -884,7 +884,7 @@ cat(" ")
 
 ###
 
-```{r 04_Newton_VPD_plot, echo=FALSE, warning=FALSE}
+```{r 04_Newton_VPD_plot, echo=FALSE, warning=FALSE, results='asis'}
 
 plot_obj <- all_plots$Newton$`Vaccine Preventable`$bar
 
@@ -1099,7 +1099,7 @@ cat(" ")
 
 ### Enteric Plot
 
-```{r 04_Newton_enterics_plot, echo=FALSE, warning=FALSE}
+```{r 04_Newton_enterics_plot, echo=FALSE, warning=FALSE, results='asis'}
 
 
 plot_obj <- all_plots$Newton$`Enteric`$bar
@@ -1151,7 +1151,7 @@ div(
 
 ### 
 
-```{r Nent_ethresults='asis'}
+```{r Nent_eth, results='asis'}
 
 div(
   class = "dashboard-card", 
@@ -1412,7 +1412,7 @@ div(
   class = "dashboard-card", 
  Rent_gender$plot,
     tags$span(
-      lass="sr-only", 
+      class="sr-only",
       Rent_gender$sr_text)
     )
 
