@@ -8,7 +8,7 @@ output:
     theme:
       version: 4 # Explicitly setting the version helps with bslib
       bg: "#FFFFFF"
-      fg: "#13293d" 
+      fg: "#13293d"
       primary: "#FAA81A"
     includes:
       in_header: OGheader.html
@@ -131,7 +131,7 @@ div <- htmltools::div
 
 # **Notifiable Diseases Dashboard Overview** {.sidebar data-width=150}
 
-##### Accessibility Settings 
+##### Accessibility Settings
 
 <div class="accessibility-controls">
   <button id="contrast-toggle" class="btn-accessibility">
@@ -140,7 +140,7 @@ div <- htmltools::div
 </div>
 
 
-#### 
+####
 
 ```{r About_summary, warning=FALSE, results='asis'}
 
@@ -205,10 +205,10 @@ vpds_district_lines <- readLines(here("narratives","VPDs.Rmd"))
 ```{r 04_VPDs_district_plot, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  vpds_district_plot$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       vpds_district_plot$sr_text)
     )
 
@@ -235,13 +235,13 @@ cat("<br>")
 ```{r district_gender, results='asis'}
 
  div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  vpds_dis_gen_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       vpds_dis_gen_pie$sr_text)
     )
- 
+
 ```
 
 
@@ -250,25 +250,25 @@ cat("<br>")
 ```{r district_ethnicity, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  vpds_dis_eth_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       vpds_dis_eth_pie$sr_text)
     )
- 
+
 ```
 
 
 ###
 
 ```{r district_race, results='asis'}
- 
+
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  vpds_dis_rac_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       vpds_dis_rac_pie$sr_text)
     )
 
@@ -276,7 +276,7 @@ div(
 ```
 
 
-## 
+##
 
 ```{r, results='asis'}
 
@@ -351,7 +351,7 @@ div(
   class = "dashboard-card",  # <- apply the global card style
 enteric_district_plot$plot,
      tags$span(
-       class="sr-only", 
+       class="sr-only",
        enteric_district_plot$sr_text)
 )
 cat("<br>")
@@ -365,20 +365,20 @@ cat("<br>")
 
 ### {.no-title .no-box}
 
-<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Enteric Illnesses</h3>
+<h3 style="font-weight=bold; margin:0;">Demographic's Distribution for Enteric Illnesses</h3>
 
 ## {.no-title .no-box}
 
 ### {.no-title .no-box}
 
 ```{r ent_dis_gen, results='asis'}
- 
- 
+
+
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  enterics_dis_gen_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       enterics_dis_gen_pie$sr_text)
     )
 
@@ -388,12 +388,12 @@ div(
 ###
 
 ```{r ent_dis_race, results='asis'}
- 
+
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  enterics_dis_rac_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       enterics_dis_rac_pie$sr_text)
     )
 
@@ -403,12 +403,12 @@ div(
 ###
 
 ```{r ent_dis_ethnicity, results='asis'}
- 
+
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  enterics_dis_eth_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       enterics_dis_eth_pie$sr_text)
     )
 
@@ -441,7 +441,7 @@ div(
   class = "dashboard-card",  # <- apply the global card style
 vbds_district_plot$plot,
      tags$span(
-       class="sr-only", 
+       class="sr-only",
        vbds_district_plot$sr_text)
 )
 cat(" ")
@@ -464,12 +464,12 @@ cat(" ")
 
 ```{r vbd_dis_gen, results='asis'}
 
- 
+
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  vbds_dis_gen_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       vbds_dis_gen_pie$sr_text)
     )
 
@@ -477,16 +477,16 @@ div(
 
 
 
-### 
+###
 
 ```{r vbd_dis_race, results='asis'}
 
- 
+
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  vbds_dis_rac_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       vbds_dis_rac_pie$sr_text)
     )
 
@@ -494,16 +494,16 @@ div(
 
 
 
-### 
+###
 
 ```{r vbd_dis_ethnicity, results='asis'}
 
- 
+
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  vbds_dis_eth_pie$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       vbds_dis_eth_pie$sr_text)
     )
 
@@ -540,9 +540,9 @@ cat(" ")
 
 
 
-## 
+##
 
-### 
+###
 
 <h3 style="font-weight=bold; margin:0;">Vaccine Preventable Illnesses</h3>
 
@@ -600,10 +600,10 @@ Gvplot_list_obj
 ```{r Gvpd_gender, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gvpd_gender$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gvpd_gender$sr_text)
     )
 
@@ -615,25 +615,25 @@ div(
 ```{r Gvpd_race, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gvpd_race$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gvpd_race$sr_text)
     )
 
 ```
 
 
-### 
+###
 
 ```{r Gvpd_eth, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gvpd_ethnicity$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gvpd_ethnicity$sr_text)
     )
 
@@ -701,40 +701,40 @@ Gvbplot_list_obj
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gvbd_gender$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gvbd_gender$sr_text)
     )
 
 ```
 
 
-### 
+###
 
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gvbd_race$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gvbd_race$sr_text)
     )
 
 ```
 
 
-### 
+###
 
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gvbd_ethnicity$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gvbd_ethnicity$sr_text)
     )
 
@@ -744,7 +744,7 @@ div(
 
 
 
-## 
+##
 
 ### {.no-title .no-box}
 
@@ -803,38 +803,38 @@ Geplot_list_obj
 ```{r Gent_gender, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gent_gender$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gent_gender$sr_text)
     )
 
 ```
 
 
-### 
+###
 
 ```{r Gent_race, results='asis'}
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gent_race$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gent_race$sr_text)
     )
 ```
 
 
-### 
+###
 
 ```{r Gent_eth, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Gent_ethnicity$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Gent_ethnicity$sr_text)
     )
 ```
@@ -848,7 +848,7 @@ div(
 
 ## Population {.no-title .no-box}
 
-### 📈 Newton Population 
+### 📈 Newton Population
 
 ```{r Npop_callout, echo=FALSE}
 Npop <- "124,010" # Example R calculation
@@ -940,19 +940,19 @@ cat("<br>")
 ### {.no-title .no-box}
 
 <h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vaccine Preventable Illnesses in Newton County</h3>
-  
+
 ## {.no-title .no-box}
-  
+
 ### {.no-title .no-box}
 
 ```{r Ngender, results='asis'}
 
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Nvpd_gender$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Nvpd_gender$sr_text)
     )
 
@@ -964,24 +964,24 @@ div(
 
 ```{r Nrace, results='asis'}
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Nvpd_race$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Nvpd_race$sr_text)
     )
 ```
 
 
-### 
+###
 
 ```{r Neth, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Nvpd_ethnicity$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Nvpd_ethnicity$sr_text)
     )
 ```
@@ -1028,19 +1028,19 @@ plot_obj$plot
 ### {.no-title .no-box}
 
 <h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vectorborne Illnesses in Newton County</h3>
-  
+
 ## {.no-title .no-box}
-  
+
 ### {.no-title .no-box}
 
 
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Nvbd_gender$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Nvbd_gender$sr_text)
     )
 
@@ -1052,10 +1052,10 @@ div(
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Nvbd_race$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Nvbd_race$sr_text)
     )
 
@@ -1067,10 +1067,10 @@ div(
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Nvbd_ethnicity$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Nvbd_ethnicity$sr_text)
     )
 
@@ -1080,7 +1080,7 @@ div(
 
 
 
-## 
+##
 
 ### {.no-title .no-box}
 
@@ -1121,43 +1121,43 @@ cat(" ")
 ## {.no-title}
 
 ### {.no-title}
-  
-```{r Ngend, results='asis'}  
+
+```{r Ngend, results='asis'}
 
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
   Nent_gender$plot,
   tags$span(
-    class="sr-only", 
+    class="sr-only",
     Nent_gender$sr_text)
 )
 
 ```
 
 
-### 
+###
 
 ```{r Nent_race, results='asis'}
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
   Nent_race$plot,
   tags$span(
-    class="sr-only", 
+    class="sr-only",
     Nent_race$sr_text)
 )
 ```
 
 
-### 
+###
 
 ```{r Nent_eth, results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
   Nent_ethnicity$plot,
   tags$span(
-    class="sr-only", 
+    class="sr-only",
     Nent_ethnicity$sr_text)
 )
 ```
@@ -1179,7 +1179,7 @@ cat(Rpop)
 
 ##
 
-### 
+###
 
 <h3 style="font-weight=bold; margin:0;">Vaccine Preventable Illnesses in Rockdale County</h3>
 
@@ -1218,9 +1218,9 @@ plot_obj$plot
 ### {.no-title .no-box}
 
 <h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vaccine Preventable Illnesses in Rockdale County</h3>
-  
+
 ## {.no-title .no-box}
-  
+
 ### {.no-title .no-box}
 
 
@@ -1301,48 +1301,48 @@ plot_obj$plot
 ### {.no-title .no-box}
 
 <h3 style="font-weight=bold; margin:0;">Demographic Distribution for Vectorborne Illnesses in Rockdale County</h3>
-  
+
 ## {.no-title .no-box}
-  
+
 ### {.no-title .no-box}
 
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Rvbd_gender$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Rvbd_gender$sr_text)
     )
 
 ```
 
 
-### 
+###
 
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Rvbd_race$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Rvbd_race$sr_text)
     )
 
 ```
 
 
-### 
+###
 
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Rvbd_ethnicity$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Rvbd_ethnicity$sr_text)
     )
 
@@ -1352,7 +1352,7 @@ div(
 
 
 
-## 
+##
 
 ### {.no-title .no-box}
 
@@ -1374,7 +1374,7 @@ cat(" ")
 
 
 # Replot_obj <- Rplot_list$bar_chart$`Enteric`$plot
-# 
+#
 # Replot_obj
 
 
@@ -1387,7 +1387,7 @@ cat(" ")
 ```{r renterics_time, results='asis'}
 
 # Replot_list_obj <- Rplot_list$line_charts$`Enteric`$plot
-# 
+#
 # Replot_list_obj
 
 ```
@@ -1409,7 +1409,7 @@ cat(" ")
 
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Rent_gender$plot,
     tags$span(
       class="sr-only",
@@ -1419,28 +1419,28 @@ div(
 ```
 
 
-### 
+###
 
 ```{r results='asis'}
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Rent_race$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Rent_race$sr_text)
     )
 ```
 
 
-### 
+###
 
 ```{r results='asis'}
 
 div(
-  class = "dashboard-card", 
+  class = "dashboard-card",
  Rent_ethnicity$plot,
     tags$span(
-      class="sr-only", 
+      class="sr-only",
       Rent_ethnicity$sr_text)
     )
 ```
@@ -1454,7 +1454,7 @@ div(
 ```{r}
 # # Read the pre-generated text summary
 # ddictionary <- readLines(here("narratives","ddictionary.Rmd"))
-# 
+#
 # # 2. Print the lines using cat() with a newline separator, cat() is used because it prints text directly, honoring the Markdown formatting.
 #  cat(ddictionary, sep = "\n")
 #  cat(" ")
