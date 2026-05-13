@@ -365,7 +365,7 @@ cat("<br>")
 
 ### {.no-title .no-box}
 
-<h3 style="font-weight=bold; margin:0;">Demographic's Distribution for Enteric Illnesses</h3>
+<h3 style="font-weight=bold; margin:0;">Demographic Distribution for Enteric Illnesses</h3>
 
 ## {.no-title .no-box}
 
