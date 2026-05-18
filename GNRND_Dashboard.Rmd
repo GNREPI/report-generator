@@ -1517,4 +1517,15 @@ hepatits$plot
 ```
 
 
+## VBD Plot
+
+### {.no-title .no-box}
+
+```{r test_VBD_plot, echo=FALSE, results='asis'}
+
+plot_obj <- all_plots$Newton$`Vectorborne`$bar
+
+plot_obj$plot
+
+
 ```
