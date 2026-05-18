@@ -60,9 +60,8 @@ source("R/05_Rockdale_county_plot.R")   # 5-yr bar and 3-yr timeseries
 source("R/06a_Gwinnett_pie_demo.R")
 source("R/06b_Newton_pie_demo.R")
 source("R/06c_Rockdale_pie_demo.R")
-# source("R/hep_timeseries.R")
+source("R/district_time_series.R")
 # source("R/5_year_county.R")
-
 
 # 5. Render a flexdashboard file ----
 # Renders the final R Markdown report that combines text, code, and outputs

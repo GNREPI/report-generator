@@ -74,7 +74,6 @@ vpd_district_race <- generate_pie_explosion(
   disease_program = vpd_pie,
   county_name = paste0("the District"))
 
- print(vpd_district_race$plot)
 
 
 # Ethnicity
@@ -84,7 +83,6 @@ vpd_district_ethnicity <- generate_pie_explosion(
   disease_program = vpd_pie,
   county_name = paste0("the District"))
 
- print(vpd_district_ethnicity$plot)
 
 
 
@@ -106,7 +104,6 @@ ent_district_gender <- generate_pie_explosion(
   county_name = paste0("the District"))
 
 
-# print(ent_district_gender)
 
 
 # Race
@@ -116,7 +113,6 @@ ent_district_race <- generate_pie_explosion(
   disease_program = ent_pie,
   county_name = paste0(" the District "))
 
-# print(ent_district_race)
 
 
 
@@ -127,7 +123,6 @@ ent_district_ethnicity <- generate_pie_explosion(
   disease_program = ent_pie,
   county_name = paste0("the District"))
 
-# print(ent_district_ethnicity)
 
 
 
@@ -150,7 +145,6 @@ vbd_district_gender <- generate_pie_explosion(
   disease_program = vbd_pie,
   county_name = paste0("the District"))
 
-# print(vbd_district_gender)
 
 
 # Race
@@ -159,7 +153,6 @@ vbd_district_race <- generate_pie_explosion(
   group_col_name = "race", # <--- Pass the column name you want to plot!
   disease_program = vbd_pie,
   county_name = paste0("the District"))
-# print(vbd_district_race)
 
 
 
@@ -170,7 +163,6 @@ vbd_district_ethnicity <- generate_pie_explosion(
   disease_program = vbd_pie,
   county_name = paste0("the District"))
 
-# print(vbd_district_ethnicity)
 
 
 

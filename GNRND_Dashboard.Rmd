@@ -104,7 +104,7 @@ program_name <- c("Vaccine Preventable", "Vectorborne", "Enteric")
 # VBD_program_name <- program_name[2] # "Vectorborne"
 # ENTERIC_program_name <- program_name[3] # "Enteric"
 
-
+hepatits <- readRDS(here("hepatitis.rds"))
 
 # 2. Keep only the "Global" objects you need for things like narratives
 # Narrative file mapping
@@ -1451,7 +1451,7 @@ div(
 
 # **Data Dictionary**
 
-```{r}
+```{r, dd}
 # # Read the pre-generated text summary
 # ddictionary <- readLines(here("narratives","ddictionary.Rmd"))
 #
@@ -1462,3 +1462,59 @@ div(
 
 
 
+
+
+
+
+
+# **Community Health**
+
+<h3 style="font-weight=bold; margin:0;">Vectorborne Illnesses in Newton County</h3>
+
+
+
+
+
+```{r ch, warning=FALSE, results='asis'}
+vbds_newton_lines <- readLines(here("narratives","VBDs.Rmd"))
+
+# 2. Print the lines using cat() with a newline separator
+#    cat() is used because it prints text directly, honoring the Markdown formatting.
+cat(vbds_newton_lines, sep = "\n")
+cat(" ")
+
+cat("<br>")
+
+```
+
+
+
+## VBD Plot
+
+### {.no-title .no-box}
+
+```{r testNewton_VBD_plot, echo=FALSE, results='asis'}
+
+plot_obj <- all_plots$Newton$`Vectorborne`$bar
+
+plot_obj$plot
+
+
+```
+
+
+# Hepatitis TIme Series Plot
+
+### {.no-title .no-box}
+
+```{r testhep_VBD_plot, echo=FALSE, results='asis'}
+
+hepatits
+
+hepatits$plot
+
+
+```
+
+
+```
