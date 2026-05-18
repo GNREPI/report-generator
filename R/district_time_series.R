@@ -59,7 +59,6 @@ vpds_district_plot <- list(
   sr_text = hep_alt_text    # Pulls the generated WCAG text
 )
 
-print(vpds_district_plot$plot)
 
 saveRDS(vpds_district_plot, file = here("hepatitis.rds"))
 
