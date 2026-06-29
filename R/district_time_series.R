@@ -53,14 +53,44 @@ hep_plot_object <- district_hep %>%
 # 3. Generate automated alt-text string for accessibility compliance
 hep_alt_text <- district_alt_text_string(district_hep)
 
-# 4. Save as a compliance-ready list with plot + screen reader text
-vpds_district_plot <- list(
-  plot = hep_plot_object,   # Pulls the active chart
-  sr_text = hep_alt_text    # Pulls the generated WCAG text
+# 4. Build per-county hepatitis plots (Newton and Rockdale)
+hep_counties <- c("Newton", "Rockdale")
+
+county_hep_plots <- lapply(hep_counties, function(cty) {
+  cty_data <- combo %>%
+    filter(county == cty) %>%
+    filter(str_detect(disease, "^Hepatitis") | str_detect(disease, "^Perinatal"))
+
+  if (nrow(cty_data) == 0) {
+    return(list(
+      plot   = plotly::plotly_empty() %>% plotly::layout(title = list(text = "No data available")),
+      sr_text = paste("No hepatitis data available for", cty, "County.")
+    ))
+  }
+
+  cty_rates    <- county_time(cty_data)
+  cty_alt_text <- county_alt_text_string(cty_rates, "Hepatitis")
+  cty_plot_obj <- county_time_plot(
+    data             = cty_rates,
+    title_text       = paste("Hepatitis Case Rates in", cty, "County, 2019\u20132024"),
+    disease_program  = "Hepatitis",
+    alt_text         = cty_alt_text,
+    county           = cty
+  )
+
+  list(plot = cty_plot_obj$plot, sr_text = cty_alt_text)
+})
+names(county_hep_plots) <- hep_counties
+
+# 5. Assemble the master list expected by the dashboard
+all_hep_plots <- c(
+  list(district = list(plot = hep_plot_object, sr_text = hep_alt_text)),
+  county_hep_plots
 )
 
-
-saveRDS(vpds_district_plot, file = here("hepatitis.rds"))
+# 6. Save to the path the dashboard reads from
+dir.create(here("output", "plots"), showWarnings = FALSE, recursive = TRUE)
+saveRDS(all_hep_plots, file = here("output", "plots", "all_hep_plots.rds"))
 
 
 # # print(district_hep)

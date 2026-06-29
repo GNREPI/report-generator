@@ -29,9 +29,9 @@ source(here("R", "packages.R"))
 source(here("R","brand_theme.R"))
 source("R/functions.R")
 source(here("R", "plot_accessibility.R"))
-
-# # # 2. Data Ingestion ----
-# # # Loads raw data from a file into R's memory.
+#
+# # # # 2. Data Ingestion ----
+# # # # Loads raw data from a file into R's memory.
 # print("Step 1: Loading raw data...")
 # source("R/01_data_import.R")
 #
