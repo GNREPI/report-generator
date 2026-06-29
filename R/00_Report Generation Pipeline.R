@@ -61,7 +61,7 @@ source("R/06a_Gwinnett_pie_demo.R")
 source("R/06b_Newton_pie_demo.R")
 source("R/06c_Rockdale_pie_demo.R")
 source("R/district_time_series.R")
-source("R", "07_age_pyramids.R")
+source("R/07_age_pyramids.R")
 
 # 5. Render a flexdashboard file ----
 # Renders the final R Markdown report that combines text, code, and outputs

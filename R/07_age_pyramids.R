@@ -23,7 +23,7 @@ source(here("R", "brand_theme.R"))
 # Load once and filter by disease_program for each program.
 message("Loading and processing data with age groups...")
 
-combo_deid <- read.csv(here("output", "combo_deidentified_clean.csv"))
+combo_deid <- qread(here("output", "combo_deidentified_clean.qs"))
 
 # Vaccine Preventable Data
 vax_deidentified_cleaned <- combo_deid |>
