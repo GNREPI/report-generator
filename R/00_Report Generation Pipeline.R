@@ -8,6 +8,18 @@
 #----
 library(here)
 
+# Ensure output directory exists (gitignored in CI; absent on fresh checkouts)
+dir.create(here("output"), showWarnings = FALSE, recursive = TRUE)
+
+# Stage canonical input data into output/ — the plot scripts read
+# combo_deidentified_clean.{qs,csv} from output/, which is where Allene's
+# (commented-out) cleaning step would have written them. The canonical source
+# of truth lives in data/clean/; this copy keeps her individual scripts
+# unmodified so future updates from her merge cleanly.
+clean_files <- list.files(here("data", "clean"), full.names = TRUE)
+if (length(clean_files) > 0) {
+  file.copy(clean_files, here("output"), overwrite = TRUE)
+}
 
 # 1. Setup and Environment ----
 # Loads required packages and custom functions.
@@ -20,24 +32,24 @@ source(here("R", "plot_accessibility.R"))
 
 # 2. Data Ingestion ----
 # Loads raw data from a file into R's memory.
-print("Step 1: Loading raw data...")
-source("R/01_data_import.R")
-
-
-# 3. Data Wrangling and Transformation ----
-# Cleans and transforms the data for data analysis
-# These scripts create cleaned dataframes and save them as .rds and .csv files.
-print("Step 2: Cleaning and transforming data...")
-source("R/02_enteric_script.R")
-source("R/02_vax_script.R")
-
-source("R/02_VBD_script.R")
+# print("Step 1: Loading raw data...")
+# source("R/01_data_import.R")
+#
+#
+# # 3. Data Wrangling and Transformation ----
+# # Cleans and transforms the data for data analysis
+# # These scripts create cleaned dataframes and save them as .rds and .csv files.
+# print("Step 2: Cleaning and transforming data...")
+# source("R/02_enteric_script.R")
+# source("R/02_vax_script.R")
+#
+# source("R/02_VBD_script.R")
 
 
 # 4. Exploratory Data Analysis (EDA) and Visualization ----
 # Generates plots and summary tables for EDA.
 print("Step 3: Creating exploratory plots...")
-source("R/03_combined_data.R")
+# source("R/03_combined_data.R")
 source("R/04_district_plot.R")
 source("R/04_district_pie_demo.R")
 source("R/05a_generate_county_plots.R")
@@ -48,9 +60,8 @@ source("R/05_Rockdale_county_plot.R")   # 5-yr bar and 3-yr timeseries
 source("R/06a_Gwinnett_pie_demo.R")
 source("R/06b_Newton_pie_demo.R")
 source("R/06c_Rockdale_pie_demo.R")
-source("R/hep_timeseries.R")
-source("R", "07_age_pyramids.R")
-
+source("R/district_time_series.R")
+# source("R/5_year_county.R")
 
 # 5. Render a flexdashboard file ----
 # Renders the final R Markdown report that combines text, code, and outputs
@@ -59,7 +70,7 @@ print("Step 4: Generating final report...")
 # Assumes report.Rmd is in the reports/folder
 
 
- rmarkdown::render(here("testing123.Rmd"),
+ rmarkdown::render(here("GNRND_Dashboard.Rmd"),
                    output_file = "final_dashboard.html")
 
 

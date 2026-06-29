@@ -47,6 +47,8 @@ pacman::p_load(
   sp,
   stringr,
   thematic,
+  tidygeocoder,
+  tidymodels,
   tidyverse, # data management and visualization
   tidyr,
   tigris,

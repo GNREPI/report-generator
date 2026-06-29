@@ -6,9 +6,7 @@
 #-------------------------------------------------------------------------------
 
 library(here)
-# Packages are loaded separately in the Rmd setup chunk, so we skip sourcing here
-# to avoid redundant p_load() checks that produce console clutter.
-# source(here("R","packages.R"))
+source(here("R","packages.R"))
 
 
 # ---------------------------
