@@ -343,8 +343,8 @@ cat("<br>")
 ### {.no-title .no-box}
 
 <h3 style="font-weight=bold; margin:0;">Demographic's Distribution for Enteric Illnesses</h3>
-<<<<<<< HEAD
-=======
+
+>>>>>>> parent of 2c8217d (Merge pull request #1 from GNREPI/covid-report)
 
 ## {.no-title .no-box}
 >>>>>>> parent of 2c8217d (Merge pull request #1 from GNREPI/covid-report)
