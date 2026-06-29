@@ -19,30 +19,23 @@ source(here("R", "functions.R"))
 source(here("R", "brand_theme.R"))
 
 # Load de-identified data ----
-# Note: We need to regenerate from source because age_group is calculated 
-# during de-identification but not yet saved to CSV files
+# Data is already de-identified (no patientid/dob) and age_group is pre-computed.
+# Load once and filter by disease_program for each program.
 message("Loading and processing data with age groups...")
 
+combo_deid <- read.csv(here("output", "combo_deidentified_clean.csv"))
+
 # Vaccine Preventable Data
-vax_raw_PHI_data <- wrangle(here("data", "clean", "clean_phi","VPDs_2019_2024_clean.qs"))
-vax_patientid_maps <- patient_id_mapping(vax_raw_PHI_data)
-raw_parsed_dates <- fix_dates(vax_raw_PHI_data)
-raw_valid_dates <- raw_parsed_dates$valid
-vax_deidentified_cleaned <- joined_deidentified(raw_valid_dates, vax_patientid_maps)
+vax_deidentified_cleaned <- combo_deid |>
+  dplyr::filter(disease_program == "Vaccine Preventable")
 
 # Enteric Data
-enteric_raw_PHI_data <- wrangle(here("data", "clean", "clean_phi", "2024_enteric_clean.qs"))
-enteric_patientid_maps <- patient_id_mapping(enteric_raw_PHI_data)
-raw_parsed_dates_enteric <- fix_dates(enteric_raw_PHI_data)
-raw_valid_dates_enteric <- raw_parsed_dates_enteric$valid
-enteric_deidentified_cleaned <- joined_deidentified(raw_valid_dates_enteric, enteric_patientid_maps)
+enteric_deidentified_cleaned <- combo_deid |>
+  dplyr::filter(disease_program == "Enteric")
 
 # Vectorborne Data
-VBD_raw_PHI_data <- wrangle(here("data", "clean","clean_phi", "2024_VBDs_clean.qs"))
-VBD_patientid_maps <- patient_id_mapping(VBD_raw_PHI_data)
-raw_parsed_dates_vbd <- fix_dates(VBD_raw_PHI_data)
-raw_valid_dates_vbd <- raw_parsed_dates_vbd$valid
-VBD_deidentified_cleaned <- joined_deidentified(raw_valid_dates_vbd, VBD_patientid_maps)
+VBD_deidentified_cleaned <- combo_deid |>
+  dplyr::filter(disease_program == "Vectorborne")
 
 # Generate District-Level Age Pyramids ----
 message("Generating district-level age pyramids...")
