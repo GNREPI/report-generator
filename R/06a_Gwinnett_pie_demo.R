@@ -56,6 +56,7 @@ Gvpd_gen_pie_list$plot
 
 # Gvpd_gen_alt_text <- gender_alt_text(Gvpd_gen_pie_object, Gvpd_pie)
 
+  # print(Gvpd_gen_pie)
 
 
 # Race
@@ -105,6 +106,7 @@ Gent_eth_pie_list$plot
 
 # Gvpd_gen_alt_text <- gender_alt_text(Gvpd_gen_pie_object, Gvpd_pie)
 
+# print(Gvpd_gen_pie)
 
 
 # Race
@@ -154,6 +156,7 @@ Gvbd_eth_pie_list$plot
 
 # Gvpd_gen_alt_text <- gender_alt_text(Gvpd_gen_pie_object, Gvpd_pie)
 
+# print(Gvpd_gen_pie)
 
 
 # Race

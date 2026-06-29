@@ -137,6 +137,43 @@ return(list(
 
 
 
+# Helper Function #4b: CALCULATE AGE GROUPS----
+# Calculate age at onset from DOB and date of onset, then assign to age group categories
+calculate_age_group <- function(df) {
+  df %>%
+    mutate(
+      # Parse dates if they're still characters
+      dob_date = mdy(dob),
+      doo_date = mdy(doo),
+      # Calculate age at onset in years
+      age_at_onset = as.numeric(difftime(doo_date, dob_date, units = "days")) / 365.25,
+      # Create age group categories
+      age_group = case_when(
+        is.na(age_at_onset) ~ "Unknown",
+        age_at_onset < 5 ~ "0-4 years",
+        age_at_onset < 12 ~ "5-11 years",
+        age_at_onset < 20 ~ "12-19 years",
+        age_at_onset < 30 ~ "20-29 years",
+        age_at_onset < 40 ~ "30-39 years",
+        age_at_onset < 50 ~ "40-49 years",
+        age_at_onset < 60 ~ "50-59 years",
+        age_at_onset < 70 ~ "60-69 years",
+        age_at_onset < 80 ~ "70-79 years",
+        age_at_onset >= 80 ~ "80+ years",
+        TRUE ~ "Unknown"
+      ),
+      # Convert to factor with proper ordering
+      age_group = factor(age_group, 
+                        levels = c("0-4 years", "5-11 years", "12-19 years", 
+                                  "20-29 years", "30-39 years", "40-49 years", 
+                                  "50-59 years", "60-69 years", "70-79 years", "80+ years", "Unknown"),
+                        ordered = TRUE)
+    ) %>%
+    # Keep the age_group column, remove intermediate calculations
+    select(-dob_date, -doo_date, -age_at_onset)
+}
+
+
 # Helper Function #5: DE-IDENTIFICATION PIPELINE----
 # File: enteric_script.R
 # File: vax_script.R
@@ -146,6 +183,9 @@ joined_deidentified <- function(df_clean, mapping_table){
 
 # Apply the join and select operations to the *valid* data frame
   df_deid_clean <- df_clean %>% # <--- THIS IS THE KEY CHANGE
+
+  # Calculate age groups BEFORE removing DOB
+  calculate_age_group() %>%
 
   # Join with the mapping to get the pseudo ID
   left_join(mapping_table, by = c("patientid", "county")) %>%
@@ -580,9 +620,9 @@ generate_county_plots <- function(data, title_text, county_alt_text, county_name
   # 1. Basic Setup and branding
   n_rows <- nrow(data)
   base_colors <- unname(brand$colors)
-  base_patterns <- brand$patterns
+  base_patterns <- if (is.null(brand$patterns)) "" else brand$patterns
   plot_colors <- rep(base_colors, length.out = n_rows)
-  plot_patterns <- rep(base_patterns, each = length(base_colors), length.out = n_rows)
+  plot_patterns <- rep(base_patterns, each = max(1, length(base_colors)), length.out = n_rows)
 
   title_font    <- brand$fonts$chart_title
   axis_font     <- brand$fonts$axis
@@ -848,12 +888,6 @@ generate_pie_chart <- function(
               # DYNAMIC POSITIONING
               textposition = ~label_position,
               textinfo = 'text',
-              # ADD THIS SECTION FOR LEADER LINES:
-              connector = list(
-                color = '#666666',      # Matching your footnote/subheading grey
-                width = 1.5,            # Crisp, thin line
-                type = 'line'           # Standard straight connector
-              ),
               # ACCESSIBLE FONTS
               insidetextfont = list(family = body_font, color = ~t_color),
               outsidetextfont = list(family = body_font, color = '#333333'),
@@ -872,7 +906,7 @@ generate_pie_chart <- function(
       ),
       legend = list(font = list(family = body_font)),
       showlegend = FALSE,
-      margin = list(l=50, r=250, b=75, t=75, pad=3),
+      margin = list(l=70, r=70, b=70, t=70, pad=3),
       annotations = list(
         list(
           text = "<b>Data Source:</b> SENDSS Georgia Department of Public Health, 2024",
@@ -992,12 +1026,6 @@ generate_pie_explosion <- function(
               values = ~per_total,
               type = 'pie',
               text= ~label,
-              # ADD THIS SECTION FOR LEADER LINES:
-              connector = list(
-                color = '#666666',      # Matching your footnote/subheading grey
-                width = 1.5,            # Crisp, thin line
-                type = 'line'           # Standard straight connector
-              ),
               # EXPLOSION & DELINEATION
               # 'pull' creates the gap. 0.05 is a 5% offset from center.
               pull = rep(0.02, nrow(data_summary)),
@@ -1023,15 +1051,12 @@ generate_pie_explosion <- function(
         font = list(family = title_font),
         x = 0.5,
         xanchor = 'center',
-        y = 0.95,
-        automargin = TRUE
+        y = 0.95
       ),
-      yaxis = list(title="",  automargin = TRUE),
       # 5. LEGEND FONT
-
       legend = list(font = list(family = body_font)),
       showlegend = FALSE,
-      margin = list(l=50, r=250, b=75, t=75, pad=3),
+      margin = list(l=200, r=100, b=75, t=75, pad=2),
 
       annotations = list(
         list(
@@ -1932,3 +1957,277 @@ percent_alt_text_string <- function(data, disease_program){
 }
 
 
+# Helper Function #32: Age Pyramid by Gender and Age Group ----
+generate_age_pyramid <- function(data, title_text = "Age and Gender Distribution", disease_program = "Disease Program") {
+  
+  # Prepare data: count by age group and gender
+  pyramid_data <- data %>%
+    filter(gender %in% c("MALE", "FEMALE")) %>%  # Exclude UNKNOWN for cleaner pyramid
+    count(age_group, gender, name = "count") %>%
+    mutate(
+      # Make counts negative for males (left side of pyramid)
+      count = case_when(
+        gender == "MALE" ~ -count,
+        TRUE ~ count
+      ),
+      gender = factor(gender, levels = c("MALE", "FEMALE"), labels = c("Male", "Female"))
+    ) %>%
+    arrange(age_group)
+  
+  # Create the age pyramid using ggplot2
+  age_pyramid_plot <- ggplot(pyramid_data, aes(x = count, y = age_group, fill = gender)) +
+    geom_col(position = "identity", width = 0.7) +
+    # Set custom colors using GNR brand palette
+    scale_fill_manual(
+      values = c("Male" = "#08786B", "Female" = "#f27866"),  # GNR Teal and Coral
+      name = "Gender"
+    ) +
+    # Format x-axis to show absolute values
+    scale_x_continuous(
+      labels = function(x) abs(x),
+      expand = expansion(mult = 0.05)
+    ) +
+    labs(
+      title = title_text,
+      subtitle = disease_program,
+      x = "Number of Cases",
+      y = "Age Group"
+    ) +
+    theme_minimal(base_size = 12, base_family = "Roboto") +
+    theme(
+      plot.title = element_text(
+        face = "bold", 
+        size = 16, 
+        family = "Brandon Grotesque Black",
+        color = "#000000",
+        margin = margin(b = 5)
+      ),
+      plot.subtitle = element_text(
+        size = 12, 
+        color = "#666666",
+        margin = margin(b = 10)
+      ),
+      axis.title = element_text(face = "bold", size = 11, color = "#000000"),
+      axis.text = element_text(size = 10, color = "#2B2B2B"),
+      axis.title.y = element_text(margin = margin(r = 10)),
+      axis.title.x = element_text(margin = margin(t = 10)),
+      panel.grid.major.x = element_line(color = "#e1e8ed", size = 0.3),
+      panel.grid.minor = element_blank(),
+      panel.grid.major.y = element_blank(),
+      legend.position = "top",
+      legend.direction = "horizontal",
+      legend.title = element_text(face = "bold", size = 11),
+      legend.text = element_text(size = 10),
+      plot.background = element_rect(fill = "#ffffff", color = NA),
+      panel.background = element_rect(fill = "#ffffff", color = NA)
+    )
+  
+  # Convert to plotly for consistency with dashboard
+  pyramid_plotly <- ggplotly(
+    age_pyramid_plot, 
+    tooltip = c("x", "y", "fill"),
+    layout = list(hovermode = "closest")
+  ) %>%
+    layout(
+      template = plot_template,
+      margin = list(l = 70, r = 70, t = 70, b = 70),
+      font = list(family = "Roboto, Arial, Sans-Serif", color = "#2B2B2B"),
+      title = list(
+        font = list(family = "Brandon Grotesque Black, Arial, Sans-Serif", size = 18, color = "#000000")
+      ),
+      xaxis = list(
+        title = list(font = list(family = "Roboto Medium, Arial, Sans-Serif", size = 13)),
+        tickfont = list(family = "Roboto, Arial, Sans-Serif", size = 11)
+      ),
+      yaxis = list(
+        title = list(font = list(family = "Roboto Medium, Arial, Sans-Serif", size = 13)),
+        tickfont = list(family = "Roboto, Arial, Sans-Serif", size = 11)
+      ),
+      legend = list(
+        orientation = "h",
+        x = 0.5,
+        y = 1.15,
+        xanchor = "center",
+        yanchor = "top",
+        font = list(family = "Roboto, Arial, Sans-Serif", size = 12)
+      )
+    ) %>%
+    config(responsive = TRUE, displayModeBar = FALSE)
+  
+  # Generate alt text for accessibility
+  total_cases <- sum(abs(pyramid_data$count))
+  male_cases <- sum(pyramid_data$count[pyramid_data$gender == "Male"])
+  female_cases <- sum(pyramid_data$count[pyramid_data$gender == "Female"])
+  
+  # Find peak age groups
+  male_peak <- pyramid_data$age_group[pyramid_data$gender == "Male" & pyramid_data$count == min(pyramid_data$count[pyramid_data$gender == "Male"])][1]
+  female_peak <- pyramid_data$age_group[pyramid_data$gender == "Female" & pyramid_data$count == max(pyramid_data$count[pyramid_data$gender == "Female"])][1]
+  
+  alt_text <- sprintf(
+    "Age pyramid showing the distribution of %d cases by age group and gender. Males comprise %d cases (%.1f%%) with highest concentration in the %s age group. Females comprise %d cases (%.1f%%) with highest concentration in the %s age group.",
+    total_cases,
+    abs(male_cases),
+    (abs(male_cases) / total_cases) * 100,
+    male_peak,
+    female_cases,
+    (female_cases / total_cases) * 100,
+    female_peak
+  )
+  
+  return(list(
+    plot = pyramid_plotly,
+    data = pyramid_data,
+    sr_text = alt_text
+  ))
+}
+
+
+# Helper Function #33: Horizontal Bar Chart for Disease Distribution by Demographics ----
+generate_horizontal_bar_chart <- function(
+    data,
+    group_col_name,
+    disease_program,
+    county_name,
+    title = NULL) {
+  
+  brand <- get_brand()
+  
+  # Define local variables
+  base_color <- brand$colors["GNRgreen"]  # Use GNR green as primary color
+  body_font <- brand$fonts$body
+  axis_font <- brand$fonts$axis
+  title_font <- brand$fonts$chart_title
+  
+  # CRITICAL CHECK: Ensure the grouping column exists
+  if (!(group_col_name %in% names(data))) {
+    stop(paste0("Error: The column '", group_col_name, "' does not exist."))
+  }
+  
+  # --- 1. DATA PREPARATION ---
+  group_sym <- sym(group_col_name)
+  
+  data_summary <- data %>%
+    group_by(!!group_sym) %>%
+    summarise(n_cases = n(), .groups = "drop") %>%
+    mutate(
+      per_total = round(n_cases / sum(n_cases) * 100, 1),
+      demo = str_to_title(as.character(!!group_sym)),
+      label = paste0(demo, " (", per_total, "%)")
+    ) %>%
+    filter(per_total > 0) %>%
+    # ASCENDING ORDER: sort from lowest to highest
+    arrange(per_total)
+  
+  # --- 2. ALT TEXT GENERATION ---
+  if (nrow(data_summary) == 0) {
+    alt_text <- paste0("No case data reported for ", disease_program, " in ", county_name, ".")
+    return(list(plot = plotly_empty(), sr_text = alt_text, data = NULL))
+  }
+  
+  # Generate descriptive alt text
+  max_group <- data_summary$demo[nrow(data_summary)]  # Last row is highest (ascending order)
+  max_val <- data_summary$per_total[nrow(data_summary)]
+  min_group <- data_summary$demo[1]  # First row is lowest
+  min_val <- data_summary$per_total[1]
+  
+  alt_text <- sprintf(
+    "Horizontal bar chart showing %s cases by %s in ascending order. %s has the highest percentage at %.1f%%, while %s has the lowest at %.1f%%. Total categories: %d.",
+    str_to_title(disease_program),
+    str_to_lower(group_col_name),
+    max_group,
+    max_val,
+    min_group,
+    min_val,
+    nrow(data_summary)
+  )
+  
+  # --- 3. TITLE LOGIC ---
+  if (is.null(title) || title == "") {
+    title_text <- paste0(
+      "Distribution of ", str_to_title(disease_program), " Illnesses by ", 
+      str_to_title(group_col_name)
+    )
+  } else {
+    title_text <- title
+  }
+  
+  # --- 4. CREATE GGPLOT HORIZONTAL BAR CHART ---
+  bar_plot <- ggplot(data_summary, aes(x = per_total, y = reorder(demo, per_total), fill = demo)) +
+    geom_col(width = 0.7, fill = base_color) +
+    geom_text(
+      aes(label = paste0(per_total, "%")),
+      hjust = -0.1,
+      family = "Roboto",
+      size = 4,
+      color = "#000000"
+    ) +
+    scale_x_continuous(
+      limits = c(0, max(data_summary$per_total) * 1.15),
+      labels = function(x) paste0(x, "%"),
+      expand = expansion(mult = c(0, 0))
+    ) +
+    labs(
+      title = title_text,
+      x = "Percentage of Cases",
+      y = str_to_title(group_col_name)
+    ) +
+    theme_minimal(base_size = 12, base_family = "Roboto") +
+    theme(
+      plot.title = element_text(
+        face = "bold",
+        size = 16,
+        family = "Brandon Grotesque Black",
+        color = "#000000",
+        margin = margin(b = 10)
+      ),
+      axis.title = element_text(
+        face = "bold",
+        size = 11,
+        color = "#000000",
+        family = "Roboto Medium"
+      ),
+      axis.text = element_text(
+        size = 10,
+        color = "#2B2B2B",
+        family = "Roboto"
+      ),
+      axis.title.y = element_text(margin = margin(r = 10)),
+      axis.title.x = element_text(margin = margin(t = 10)),
+      panel.grid.major.x = element_line(color = "#e1e8ed", size = 0.3),
+      panel.grid.minor = element_blank(),
+      panel.grid.major.y = element_blank(),
+      plot.background = element_rect(fill = "#ffffff", color = NA),
+      panel.background = element_rect(fill = "#ffffff", color = NA),
+      legend.position = "none"
+    )
+  
+  # --- 5. CONVERT TO PLOTLY FOR DASHBOARD ---
+  bar_plotly <- ggplotly(
+    bar_plot,
+    tooltip = c("x", "y"),
+    layout = list(hovermode = "closest")
+  ) %>%
+    layout(
+      template = plot_template,
+      margin = list(l = 70, r = 70, t = 70, b = 70),
+      font = list(family = "Roboto, Arial, Sans-Serif", color = "#2B2B2B"),
+      title = list(
+        font = list(family = "Brandon Grotesque Black, Arial, Sans-Serif", size = 18, color = "#000000")
+      ),
+      xaxis = list(
+        title = list(font = list(family = "Roboto Medium, Arial, Sans-Serif", size = 13)),
+        tickfont = list(family = "Roboto, Arial, Sans-Serif", size = 11)
+      ),
+      yaxis = list(
+        title = list(font = list(family = "Roboto Medium, Arial, Sans-Serif", size = 13)),
+        tickfont = list(family = "Roboto, Arial, Sans-Serif", size = 11)
+      )
+    ) %>%
+    config(responsive = TRUE, displayModeBar = FALSE)
+  
+  return(list(
+    plot = bar_plotly,
+    data = data_summary,
+    sr_text = alt_text
+  ))
+}

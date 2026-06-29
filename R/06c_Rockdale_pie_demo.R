@@ -48,6 +48,7 @@ Rvpd_gen_pie_list$plot
 
 # Rvpd_gen_alt_text <- gender_alt_text(Rvpd_gen_pie_object, Rvpd_pie)
 
+# print(Rvpd_gen_pie)
 
 
 # Race
@@ -97,6 +98,7 @@ Rent_eth_pie_list$plot
 
 # Rvpd_gen_alt_text <- gender_alt_text(Rvpd_gen_pie_object, Rvpd_pie)
 
+# print(Rvpd_gen_pie)
 
 
 # Race

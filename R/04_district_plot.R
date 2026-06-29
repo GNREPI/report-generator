@@ -82,6 +82,7 @@ vpds_district_plot <- list(
   sr_text = vpds_alt_text
 )
 
+    print(vpds_district_plot$plot)
 
 
 
@@ -115,6 +116,7 @@ enterics_district_plot <- list(
   sr_text = enterics_alt_text
 )
 #
+    print(enterics_district_plot$plot)
 
 
 # ------------------------------------------------------------------
@@ -148,6 +150,7 @@ vbds_district_plot <- list(
   sr_text = vbds_alt_text
 )
 
+    print(vbds_district_plot$plot)
 
 
 

@@ -47,6 +47,7 @@ Nvpd_gen_pie_list$plot
 
 # Nvpd_gen_alt_text <- gender_alt_text(Nvpd_gen_pie_object, Nvpd_pie)
 
+# print(Nvpd_gen_pie)
 
 
 # Race
@@ -96,6 +97,7 @@ Nent_eth_pie_list$plot
 
 # Nvpd_gen_alt_text <- gender_alt_text(Nvpd_gen_pie_object, Nvpd_pie)
 
+# print(Nvpd_gen_pie)
 
 
 # Race
